@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>tychodemo</groupId>
+	<artifactId>parent</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<!-- this is the parent POM from which all modules inherit common settings -->
+	<properties>
+		<tycho-version>0.12.0</tycho-version>
+		<tycho-groupid>org.eclipse.tycho</tycho-groupid>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<!-- configure p2 repository to resolve against -->
+	<repositories>
+		<repository>
+			<id>indigo</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/releases/indigo/</url>
+		</repository>
+		<repository>
+			<id>swtbot</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site/</url>
+		</repository>
+	</repositories>
+
+	<modules>
+		<module>../tychodemo-target</module>
+		<module>../tychodemo</module>
+		<module>../tychodemo.test</module>
+		<!-- module>../tychodemo-updatesite</module -->
+		<module>../tychodemo-feature</module>
+		<module>../tychodemo-product</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>${tycho-groupid}</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			
+			<plugin>
+				<groupId>${tycho-groupid}</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<resolver>p2</resolver>
+					<ignoreTychoRepositories>true</ignoreTychoRepositories>
+					<target>
+						<artifact>
+							<groupId>tychodemo</groupId>
+							<artifactId>target</artifactId>
+							<version>1.0.0-SNAPSHOT</version>
+							<classifier>indigo</classifier>
+						</artifact>
+					</target>
+				
+					<!-- configure the p2 target environments for multi-platform build -->
+					<environments>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<!--environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment-->
+					</environments>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<!-- as a workaround for TYCHO-520, only build mac binaries on macs -->
+			<id>macosx</id>
+			<activation>
+				<property>
+					<name>java.vendor.url</name>
+					<value>http://www.apple.com/</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>target-platform-configuration</artifactId>
+						<version>${tycho-version}</version>
+						<configuration>
+							<environments combine.children="append">
+								<environment>
+									<os>macosx</os>
+									<ws>cocoa</ws>
+									<arch>x86_64</arch>
+								</environment>
+							</environments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		
+		<profile>
+			<activation>
+				<os>
+					<name>Linux</name>
+				</os>
+			</activation>
+			<id>linuxBuild</id>
+			<properties>
+				<build.os>linux</build.os>
+				<build.ws>gtk</build.ws>
+				<build.arch>x86_64</build.arch>
+			</properties>
+		</profile>
+		
+	</profiles>
+	
+</project>

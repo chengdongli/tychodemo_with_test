@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tychotest
+Bundle-SymbolicName: tychodemo.test
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: tychodemo
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.junit,
+ org.eclipse.swtbot.eclipse.core;bundle-version="2.0.4",
+ org.eclipse.swtbot.junit4_x;bundle-version="2.0.4",
+ org.eclipse.swtbot.swt.finder;bundle-version="2.0.4",
+ org.eclipse.swtbot.eclipse.finder;bundle-version="2.0.4",
+ org.eclipse.swtbot.eclipse.junit4.headless;bundle-version="2.0.4",
+ org.eclipse.swtbot.eclipse.spy;bundle-version="2.0.4",
+ org.eclipse.swtbot.eclipse.ui;bundle-version="2.0.4"

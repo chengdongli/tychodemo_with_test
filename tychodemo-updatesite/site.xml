@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="Tycho Demo">
+      Tycho demo
+   </description>
+   <feature url="features/tychodemo.feature_1.0.0.201109101631.jar" id="tychodemo.feature" version="1.0.0.201109101631">
+      <category name="Tycho Demo"/>
+   </feature>
+   <category-def name="Tycho Demo" label="Tycho Demo"/>
+</site>

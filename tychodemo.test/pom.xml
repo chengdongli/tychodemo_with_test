@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>parent</artifactId>
+    <groupId>tychodemo</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../tychodemo-parent/pom.xml</relativePath>
+  </parent>
+  <groupId>tychodemo</groupId>
+  <artifactId>tychodemo.test</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>eclipse-test-plugin</packaging>
+  
+  <properties>
+    <local-tychodemo-site>file:/${basedir}/../tychodemo-product/target/repository</local-tychodemo-site>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>local-tychodmo</id>
+      <layout>p2</layout>
+      <url>${local-tychodemo-site}</url>
+    </repository>
+  </repositories>
+  
+  <profiles>
+    <profile>
+      <id>skip-ui-tests</id>
+      <activation>
+        <property>
+          <name>skip-ui-tests</name>
+        </property>
+      </activation>
+      <properties>
+        <maven.test.skip>true</maven.test.skip>
+      </properties>
+    </profile>
+    <profile>
+      <id>macosx</id>
+      <activation>
+        <os>
+          <name>mac os x</name>
+          <family>mac</family>
+        </os>
+      </activation>
+      <properties>
+        <ui.test.vmargs>-Xmx512m -XX:MaxPermSize=256m -XstartOnFirstThread</ui.test.vmargs>
+      </properties>
+    </profile>
+    
+    <profile>
+      <id>other-os</id>
+      <activation>
+        <os>
+          <name>not-mac</name>
+          <family>!mac</family>
+        </os>
+      </activation>
+      <properties>
+        <ui.test.vmargs>-Xmx512m -XX:MaxPermSize=256m</ui.test.vmargs>
+      </properties>
+    </profile>
+  </profiles>
+    
+  <build>
+    <plugins>
+      <!--plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-surefire-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <testSuite>tychodemo</testSuite>
+          <testClass>tychodemo.AllTests</testClass>
+          <useUIHarness>true</useUIHarness>
+          <useUIThread>true</useUIThread>
+          <product>tychodemo.product</product>
+          <argLine>${ui.test.vmargs}</argLine>
+          <application>tychodemo.application</application>
+          <dependencies>
+            <dependency>
+              <type>p2-installable-unit</type>
+              <artifactId>org.eclipse.pde.feature.group</artifactId>
+              <version>${platform-version}</version>
+            </dependency>
+           </dependencies>
+        </configuration>
+      </plugin-->
+      
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-surefire-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <testSuite>tychodemo.test</testSuite>
+          <testClass>tychotest.AllTests</testClass>
+          <useUIHarness>true</useUIHarness>
+          <useUIThread>false</useUIThread>
+          <product>org.eclipse.sdk.ide</product>
+          <argLine>${ui.test.vmargs}</argLine>
+          <application>org.eclipse.ui.ide.workbench</application>
+          <dependencies>
+            <dependency>
+              <type>p2-installable-unit</type>
+              <artifactId>tychodemo.feature.feature.group</artifactId>
+              <version>1.0.0</version>
+            </dependency>
+            <dependency>
+              <type>p2-installable-unit</type>
+              <artifactId>org.eclipse.pde.feature.group</artifactId>
+              <version>${platform-version}</version>
+            </dependency>
+           </dependencies>
+        </configuration>
+      </plugin>
+ 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.7.2</version>
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <configuration>
+              <testClassesDirectory>${project.build.outputDirectory}</testClassesDirectory>
+              <includes>
+                <include>**/AllTests.java</include>
+              </includes>
+            </configuration>
+            <goals>
+              <goal>test</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <!-- dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies -->
+  
+</project>
